@@ -212,10 +212,10 @@ let chords = [
     { name: "Dm9 (Minor 9th, 5th String Root)", shape: [64, 47, 34, 19], category: "9ths" },   
     { name: "Amaj9 (Major 9th, 6th String Root)", shape: [79, 50, 33, 19], category: "9ths" }, 
     
-    // Minor 7ths
-    { name: "F#m7 (6th String Root)", shape: [79, 49, 34, 19], category: "minor" },          
+    // Minor 7ths (Fixed F#m7 to the 2nd fret!)
+    { name: "F#m7 (6th String Root)", shape: [76, 46, 31, 16], category: "minor" },          
 
-    // Dominant, Altered, & Diminished (Fixed!)
+    // Dominant, Altered, & Diminished 
     { name: "E7#9 (Hendrix Chord)", shape: [66, 50, 36, 22], category: "dominant" },            
     { name: "A13 (6th String Root)", shape: [79, 49, 35, 21], category: "dominant" },           
     { name: "C7#9 (Altered Dominant)", shape: [62, 46, 32, 18], category: "dominant" },         
@@ -227,16 +227,15 @@ let chords = [
     { name: "Gm6 (6th String Root)", shape: [77, 46, 32, 17], category: "6ths" },           
     { name: "Cm6 (5th String Root)", shape: [62, 45, 31, 15], category: "6ths" },            
 
-    // Diminished 7th Passing Chords
+    // Diminished 7th Passing Chords (Fixed to correct frets!)
     // Example: G#dim7 (4-x-3-4-3-x) -> Great for passing from G to Am
-    { name: "Dim7 (6th String Root)", shape: [79, 48, 34, 18], category: "diminished" }, 
+    { name: "Dim7 (6th String Root)", shape: [78, 47, 33, 17], category: "diminished" }, 
     
     // Example: C#dim7 (x-4-5-3-5-x) -> Great for passing from C to Dm
-    { name: "Dim7 (5th String Root)", shape: [64, 50, 33, 20], category: "diminished" }, 
+    { name: "Dim7 (5th String Root)", shape: [63, 49, 32, 19], category: "diminished" }, 
     
     // Example: F#dim7 (x-x-4-5-4-5) -> Great for passing from F to Gm
-    { name: "Dim7 (4th String Root)", shape: [49, 35, 19, 5], category: "diminished" }
-    
+    { name: "Dim7 (4th String Root)", shape: [48, 34, 18, 4], category: "diminished" }
 ];
 
 // 1. SETUP FRETBOARD
