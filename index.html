@@ -241,18 +241,35 @@ for(let s = 0; s < 6; s++) {
         fret.className = "fret";
 
         fret.onclick = function() {
+            // If they click a dot they already placed, just remove it (toggle off)
             if(fret.querySelector(".user")) {
                 fret.innerHTML = "";
             } else {
+                // NEW: Before placing a new dot, clear any existing user dots on this specific string
+                let startCell = s * numFrets;
+                let endCell = startCell + numFrets;
+                
+                for(let i = startCell; i < endCell; i++) {
+                    if(cells[i].querySelector(".user")) {
+                        cells[i].innerHTML = "";
+                    }
+                }
+
+                // Clear an answer dot if it happens to be right where they clicked
                 if(fret.querySelector(".answer")) fret.innerHTML = "";
+                
+                // Place the new dot
                 fret.innerHTML = '<div class="dot user"></div>';
             }
+            
+            // Clear the feedback text when they interact
             document.getElementById("feedback").innerText = ""; 
         }
         board.appendChild(fret);
         cells.push(fret); 
     }
 }
+
 
 // 2. SETUP NUMBERS
 for(let f = 1; f <= numFrets; f++) {
