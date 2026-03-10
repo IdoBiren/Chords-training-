@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Advanced Chord Shape Trainer</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- Screen Visibility --- */
+.screen { display: none; padding: 20px; }
+.active-screen { display: block !important; }
+
+/* --- Home Screen --- */
+#home-screen { margin-top: 60px; }
+#home-screen h1 { font-size: 48px; color: #333; margin-bottom: 10px; }
+#home-screen p { font-size: 18px; color: #666; margin-bottom: 20px; }
+
+/* --- Filter Checkboxes --- */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter-label {
+    font-size: 16px;
+    background: #e0e0e0;
+    padding: 10px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.2s;
+}
+
+.filter-label:hover {
+    background: #d4d4d4;
+}
+
+/* Make checkboxes slightly larger */
+.filter-label input {
+    margin-right: 8px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.start-btn {
+    font-size: 20px;
+    padding: 12px 24px;
+    background: #4CAF50;
+    color: white; 
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.start-btn:hover { background: #45a049; }
+
+/* --- App Screen --- */
+#chord { font-size: 32px; margin: 10px; }
+
+#feedback {
+    font-size: 20px;
+    font-weight: bold;
+    height: 24px; 
+    margin: 10px;
+}
+
+.scroll-container {
+    width: 90vw;
+    max-width: 800px;
+    margin: 10px auto;
+    overflow-x: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.fretboard {
+    display: grid;
+    grid-template-columns: repeat(15, 60px); 
+    grid-template-rows: repeat(6, 40px) 30px; 
+    justify-content: left;
+    margin: 0 20px; 
+    width: fit-content;
+    border-left: 8px solid #111; 
+}
+
+.fret {
+    position: relative;
+    border-right: 2px solid #999;
+    cursor: pointer;
+}
+
+.fret::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #555;
+    transform: translateY(-50%);
+}
+
+.dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.user { background: #111; }
+.answer { background: #4CAF50; }
+
+.fret-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #666;
+    font-size: 14px;
+}
+
+button {
+    font-size: 16px;
+    padding: 8px 16px;
+    margin: 8px;
+    border: none;
+    border-radius: 6px;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover { background: #555; }
+.nav-btn { background: #888; }
+.nav-btn:hover { background: #666; }
+.check-btn { background: #2196F3; }
+.check-btn:hover { background: #0b7dda; }
+
+</style>
+</head>
+
+<body>
+
+<div id="home-screen" class="screen active-screen">
+    <h1>Advanced Chord Master</h1>
+    <p>Select the chord types you want to practice today:</p>
+    
+    <div class="filters">
+        <label class="filter-label"><input type="checkbox" value="major" checked> Major 7ths</label>
+        <label class="filter-label"><input type="checkbox" value="minor" checked> Minor 7ths</label>
+        <label class="filter-label"><input type="checkbox" value="9ths" checked> 9ths</label>
+        <label class="filter-label"><input type="checkbox" value="dominant" checked> Dominants & Altered</label>
+        <label class="filter-label"><input type="checkbox" value="6ths" checked> 6ths</label>
+    </div>
+
+    <button class="start-btn" onclick="startApp()">Start Training</button>
+</div>
+
+<div id="app-screen" class="screen">
+    <h1 id="chord">Press Next</h1>
+    
+    <p id="feedback"></p> 
+
+    <div class="scroll-container">
+        <div class="fretboard" id="board"></div>
+    </div>
+
+    <button class="check-btn" onclick="checkAnswer()">Check Answer</button>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="clearBoard()">Clear</button>
+    <button onclick="nextChord()">Next Chord</button>
+    <br><br>
+    <button class="nav-btn" onclick="goHome()">Back to Settings</button>
+</div>
+
+<script>
+let board = document.getElementById("board");
+let cells = [];
+let numFrets = 15; 
+let currentChord = null;
+let filteredChords = []; // NEW: Array to hold only the selected categories
+
+/* Added "category" property to every chord */
+let chords = [
+    // Major 7ths
+    { name: "Gmaj7 (Drop 2, 6th String Root)", shape: [78, 49, 34, 18], category: "major" }, 
+    { name: "Fmaj7#11 (Lydian Voicing)", shape: [48, 35, 20, 7], category: "major" },        
+    
+    // 9th Chords 
+    { name: "C9 (Dominant 9th, 5th String Root)", shape: [62, 46, 32, 17], category: "9ths" }, 
+    { name: "G9 (Funk Shape, 5th String Root)", shape: [69, 53, 39, 24], category: "9ths" },   
+    { name: "Dm9 (Minor 9th, 5th String Root)", shape: [64, 47, 34, 19], category: "9ths" },   
+    { name: "Amaj9 (Major 9th, 6th String Root)", shape: [79, 50, 33, 19], category: "9ths" }, 
+    
+    // Minor 7ths
+    { name: "F#m7 (6th String Root)", shape: [80, 50, 35, 20], category: "minor" },          
+
+    // Dominant, Altered, & Diminished
+    { name: "E7#9 (Hendrix Chord)", shape: [67, 51, 37, 23], category: "dominant" },            
+    { name: "A13 (6th String Root)", shape: [80, 50, 36, 22], category: "dominant" },           
+    { name: "C7#9 (Altered Dominant)", shape: [63, 47, 33, 19], category: "dominant" },         
+    { name: "Bm7b5 (Half-Diminished)", shape: [62, 48, 32, 18], category: "dominant" },         
+    
+    // 6th Chords
+    { name: "G6 (6th String Root)", shape: [77, 46, 33, 17], category: "6ths" },            
+    { name: "C6 (5th String Root)", shape: [62, 46, 31, 15], category: "6ths" },            
+    { name: "Gm6 (6th String Root)", shape: [77, 46, 32, 17], category: "6ths" },           
+    { name: "Cm6 (5th String Root)", shape: [62, 45, 31, 15], category: "6ths" }            
+];
+
+// 1. SETUP FRETBOARD
+for(let s = 0; s < 6; s++) {
+    for(let f = 0; f < numFrets; f++) {
+        let fret = document.createElement("div");
+        fret.className = "fret";
+
+        fret.onclick = function() {
+            if(fret.querySelector(".user")) {
+                fret.innerHTML = "";
+            } else {
+                if(fret.querySelector(".answer")) fret.innerHTML = "";
+                fret.innerHTML = '<div class="dot user"></div>';
+            }
+            document.getElementById("feedback").innerText = ""; 
+        }
+        board.appendChild(fret);
+        cells.push(fret); 
+    }
+}
+
+// 2. SETUP NUMBERS
+for(let f = 1; f <= numFrets; f++) {
+    let numBox = document.createElement("div");
+    numBox.className = "fret-number";
+    numBox.innerText = f;
+    board.appendChild(numBox);
+}
+
+// 3. UI FUNCTIONS
+function startApp() {
+    // Read which checkboxes are checked
+    let checkboxes = document.querySelectorAll('.filters input[type="checkbox"]:checked');
+    let selectedCategories = Array.from(checkboxes).map(cb => cb.value);
+
+    // Make sure they picked at least one category
+    if(selectedCategories.length === 0) {
+        alert("Please select at least one chord category to practice!");
+        return;
+    }
+
+    // Filter the main dictionary based on the selections
+    filteredChords = chords.filter(chord => selectedCategories.includes(chord.category));
+
+    // Swap screens
+    document.getElementById("home-screen").classList.remove("active-screen");
+    document.getElementById("app-screen").classList.add("active-screen");
+    
+    // Always load a fresh chord based on the new settings
+    nextChord();
+}
+
+function goHome() {
+    document.getElementById("app-screen").classList.remove("active-screen");
+    document.getElementById("home-screen").classList.add("active-screen");
+}
+
+function nextChord() {
+    clearBoard();
+    // Notice we use filteredChords here instead of chords!
+    let random = Math.floor(Math.random() * filteredChords.length);
+    currentChord = filteredChords[random];
+    document.getElementById("chord").innerText = currentChord.name;
+}
+
+function checkAnswer() {
+    if(!currentChord) return;
+
+    let userDots = [];
+    let feedback = document.getElementById("feedback");
+
+    cells.forEach((cell, index) => {
+        if(cell.querySelector(".user")) {
+            userDots.push(index);
+        }
+    });
+
+    if(userDots.length !== currentChord.shape.length) {
+        feedback.innerText = "Not quite! Check the number of notes.";
+        feedback.style.color = "#f44336"; 
+        return; 
+    }
+
+    let isCorrect = userDots.every(dotIndex => currentChord.shape.includes(dotIndex));
+
+    if(isCorrect) {
+        feedback.innerText = "Correct! Great job!";
+        feedback.style.color = "#4CAF50"; 
+        
+        cells.forEach(c => {
+            if(c.querySelector(".user")) {
+                c.innerHTML = '<div class="dot answer"></div>';
+            }
+        });
+    } else {
+        feedback.innerText = "Incorrect shape. Keep trying or click Show Answer!";
+        feedback.style.color = "#f44336"; 
+    }
+}
+
+function showAnswer() {
+    if(!currentChord) return;
+    clearBoard(); 
+    document.getElementById("feedback").innerText = "Here is the answer.";
+    document.getElementById("feedback").style.color = "#666"; 
+    
+    currentChord.shape.forEach(i => {
+        cells[i].innerHTML = '<div class="dot answer"></div>';
+    });
+}
+
+function clearBoard() {
+    document.getElementById("feedback").innerText = ""; 
+    cells.forEach(c => {
+        c.innerHTML = "";
+    });
+}
+</script>
+
+</body>
+</html>
