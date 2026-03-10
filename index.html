@@ -205,21 +205,29 @@ let chords = [
     // Major 7ths
     { name: "Gmaj7 (Drop 2, 6th String Root)", shape: [77, 48, 33, 17], category: "major" }, 
     { name: "Fmaj7#11 (Lydian Voicing)", shape: [47, 34, 19, 6], category: "major" },        
+    { name: "Cmaj7 (5th String Root / 3rd Fret)", shape: [62, 49, 33, 19], category: "major" }, // NEW
     
-    // 9th Chords 
+    // 9th & Sus Chords 
     { name: "C9 (5th String Root)", shape: [62, 46, 32, 17], category: "9ths" }, 
     { name: "G9 (5th String Root)", shape: [69, 53, 39, 24], category: "9ths" },   
     { name: "Dm9 (5th String Root)", shape: [64, 47, 34, 19], category: "9ths" },   
     { name: "Amaj9 (6th String Root)", shape: [79, 50, 33, 19], category: "9ths" }, 
+    { name: "G9sus4 (6th String Root / 3rd Fret)", shape: [77, 47, 34, 17], category: "9ths" }, // NEW
     
-    // Minor 7ths (Fixed F#m7 to the 2nd fret!)
+    // Minor 7ths & 11ths
     { name: "F#m7 (6th String Root)", shape: [76, 46, 31, 16], category: "minor" },          
+    { name: "Am7 (6th String Root / 5th Fret)", shape: [79, 49, 34, 19], category: "minor" }, // NEW
+    { name: "Dm7 (5th String Root / 5th Fret)", shape: [64, 51, 34, 20], category: "minor" }, // NEW
+    { name: "Bm11 (Quartal Voicing / 2nd Fret)", shape: [61, 46, 31, 17], category: "minor" }, // NEW
 
-    // Dominant, Altered, & Diminished 
+    // Dominant, Altered, & Shell Voicings 
     { name: "E7#9 (Hendrix Chord)", shape: [66, 50, 36, 22], category: "dominant" },            
     { name: "A13 (6th String Root)", shape: [79, 49, 35, 21], category: "dominant" },           
     { name: "C7#9 (Altered Dominant)", shape: [62, 46, 32, 18], category: "dominant" },         
     { name: "Bm7b5 (5th String Root)", shape: [61, 47, 31, 17], category: "dominant" },         
+    { name: "G7 (Shell Voicing / 3rd Fret)", shape: [77, 47, 33], category: "dominant" }, // NEW
+    { name: "C7 (Shell Voicing / 3rd Fret)", shape: [62, 46, 32], category: "dominant" }, // NEW
+    { name: "G7#5 (Altered / 3rd Fret)", shape: [77, 47, 33, 18], category: "dominant" }, // NEW
     
     // 6th Chords
     { name: "G6 (6th String Root)", shape: [77, 46, 33, 17], category: "6ths" },            
@@ -227,11 +235,10 @@ let chords = [
     { name: "Gm6 (6th String Root)", shape: [77, 46, 32, 17], category: "6ths" },           
     { name: "Cm6 (5th String Root)", shape: [62, 45, 31, 15], category: "6ths" },            
 
-        // Diminished 7th Passing Chords
+    // Diminished 7th Passing Chords
     { name: "G#dim7 (6th String Root / 4th Fret)", shape: [78, 47, 33, 17], category: "diminished" }, 
     { name: "C#dim7 (5th String Root / 4th Fret)", shape: [63, 49, 32, 19], category: "diminished" }, 
     { name: "F#dim7 (4th String Root / 4th Fret)", shape: [48, 34, 18, 4], category: "diminished" }
-
 ];
 
 // 1. SETUP FRETBOARD
