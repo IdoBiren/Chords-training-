@@ -169,6 +169,7 @@ button:hover { background: #555; }
         <label class="filter-label"><input type="checkbox" value="minor" checked> Minor 7ths</label>
         <label class="filter-label"><input type="checkbox" value="9ths" checked> 9ths</label>
         <label class="filter-label"><input type="checkbox" value="dominant" checked> Dominants & Altered</label>
+        <label class="filter-label"><input type="checkbox" value="diminished" checked> Diminished</label>
         <label class="filter-label"><input type="checkbox" value="6ths" checked> 6ths</label>
     </div>
 
@@ -202,8 +203,8 @@ let filteredChords = []; // NEW: Array to hold only the selected categories
 /* Added "category" property to every chord */
 let chords = [
     // Major 7ths
-    { name: "Gmaj7 (Drop 2, 6th String Root)", shape: [78, 49, 34, 18], category: "major" }, 
-    { name: "Fmaj7#11 (Lydian Voicing)", shape: [48, 35, 20, 7], category: "major" },        
+    { name: "Gmaj7 (Drop 2, 6th String Root)", shape: [77, 48, 33, 17], category: "major" }, 
+    { name: "Fmaj7#11 (Lydian Voicing)", shape: [47, 34, 19, 6], category: "major" },        
     
     // 9th Chords 
     { name: "C9 (Dominant 9th, 5th String Root)", shape: [62, 46, 32, 17], category: "9ths" }, 
@@ -212,19 +213,30 @@ let chords = [
     { name: "Amaj9 (Major 9th, 6th String Root)", shape: [79, 50, 33, 19], category: "9ths" }, 
     
     // Minor 7ths
-    { name: "F#m7 (6th String Root)", shape: [80, 50, 35, 20], category: "minor" },          
+    { name: "F#m7 (6th String Root)", shape: [79, 49, 34, 19], category: "minor" },          
 
-    // Dominant, Altered, & Diminished
-    { name: "E7#9 (Hendrix Chord)", shape: [67, 51, 37, 23], category: "dominant" },            
-    { name: "A13 (6th String Root)", shape: [80, 50, 36, 22], category: "dominant" },           
-    { name: "C7#9 (Altered Dominant)", shape: [63, 47, 33, 19], category: "dominant" },         
-    { name: "Bm7b5 (Half-Diminished)", shape: [62, 48, 32, 18], category: "dominant" },         
+    // Dominant, Altered, & Diminished (Fixed!)
+    { name: "E7#9 (Hendrix Chord)", shape: [66, 50, 36, 22], category: "dominant" },            
+    { name: "A13 (6th String Root)", shape: [79, 49, 35, 21], category: "dominant" },           
+    { name: "C7#9 (Altered Dominant)", shape: [62, 46, 32, 18], category: "dominant" },         
+    { name: "Bm7b5 (Half-Diminished)", shape: [61, 47, 31, 17], category: "dominant" },         
     
     // 6th Chords
     { name: "G6 (6th String Root)", shape: [77, 46, 33, 17], category: "6ths" },            
     { name: "C6 (5th String Root)", shape: [62, 46, 31, 15], category: "6ths" },            
     { name: "Gm6 (6th String Root)", shape: [77, 46, 32, 17], category: "6ths" },           
     { name: "Cm6 (5th String Root)", shape: [62, 45, 31, 15], category: "6ths" }            
+
+    // Diminished 7th Passing Chords
+    // Example: G#dim7 (4-x-3-4-3-x) -> Great for passing from G to Am
+    { name: "Dim7 (6th String Root)", shape: [79, 48, 34, 18], category: "diminished" }, 
+    
+    // Example: C#dim7 (x-4-5-3-5-x) -> Great for passing from C to Dm
+    { name: "Dim7 (5th String Root)", shape: [64, 50, 33, 20], category: "diminished" }, 
+    
+    // Example: F#dim7 (x-x-4-5-4-5) -> Great for passing from F to Gm
+    { name: "Dim7 (4th String Root)", shape: [49, 35, 19, 5], category: "diminished" }
+    
 ];
 
 // 1. SETUP FRETBOARD
